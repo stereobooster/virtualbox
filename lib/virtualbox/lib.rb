@@ -83,7 +83,10 @@ module VirtualBox
       end
 
       @virtualbox = @interface.virtualbox
-      @session = @interface.session
+    end
+    
+    def session
+      @interface.session
     end
   end
 end

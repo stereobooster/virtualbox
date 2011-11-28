@@ -6,7 +6,6 @@ module VirtualBox
       # initialized, all other parts of the API can be accessed via these
       # instances.
       attr_reader :virtualbox
-      attr_reader :session
 
       def initialize
         super
@@ -26,8 +25,6 @@ module VirtualBox
         COM::Util.set_interface_version(version)
 
         @virtualbox = COM::Util.versioned_interface(:VirtualBox).new(Implementer::MSCOM, self, WIN32OLE.new("VirtualBox.VirtualBox"))
-        @session = COM::Util.versioned_interface(:Session).new(Implementer::MSCOM, self, WIN32OLE.new("VirtualBox.Session"))
-
         vb_version = @virtualbox.version
 
         # Check if they match or not.
@@ -38,6 +35,10 @@ module VirtualBox
         end
 
         true
+      end
+
+      def session
+        @session ||= COM::Util.versioned_interface(:Session).new(Implementer::MSCOM, self, WIN32OLE.new("VirtualBox.Session"))
       end
     end
   end
